@@ -1,0 +1,287 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --bg-dark: #0d1117;
+  --bg-card: rgba(22, 27, 34, 0.85);
+  --bg-card-hover: rgba(33, 38, 45, 0.95);
+  --accent-green: #10b981;
+  --accent-neon: #00ff87;
+  --accent-gold: #f59e0b;
+  --accent-gold-bright: #ffd700;
+  --text-main: #f0f6fc;
+  --text-muted: #8b949e;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-glow-green: rgba(16, 185, 129, 0.4);
+  --border-glow-gold: rgba(245, 158, 11, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Cairo', 'Inter', sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0d1117; }
+::-webkit-scrollbar-thumb { background: #21262d; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-green); }
+
+/* ============================================================
+   GLASSMORPHISM CARD
+   ============================================================ */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: var(--border-glow-green);
+  box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.25);
+  transform: translateY(-2px);
+}
+
+.glass-card-gold:hover {
+  border-color: var(--border-glow-gold);
+  box-shadow: 0 10px 30px -10px rgba(245, 158, 11, 0.25);
+}
+
+/* ============================================================
+   TEXT EFFECTS
+   ============================================================ */
+.text-neon-green {
+  color: var(--accent-neon);
+  text-shadow: 0 0 12px rgba(0, 255, 135, 0.3);
+}
+
+.text-gold {
+  color: var(--accent-gold-bright);
+  text-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.glow-btn-green {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35);
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.glow-btn-green:hover {
+  box-shadow: 0 6px 28px rgba(16, 185, 129, 0.55);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.glow-btn-gold {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35);
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.glow-btn-gold:hover {
+  box-shadow: 0 6px 28px rgba(245, 158, 11, 0.55);
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-backdrop {
+  background: rgba(5, 7, 10, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ============================================================
+   HERO IMAGE GRADIENT BORDER
+   ============================================================ */
+.gradient-border-box {
+  position: relative;
+  background: #161b22;
+  border-radius: 1rem;
+  padding: 1px;
+}
+
+.gradient-border-box::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 1rem;
+  background: linear-gradient(45deg, #10b981, #f59e0b, #00ff87);
+  z-index: -1;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.gradient-border-box:hover::before {
+  opacity: 0.8;
+}
+
+/* ============================================================
+   BADGES
+   ============================================================ */
+.badge-neon {
+  background: rgba(0, 255, 135, 0.15);
+  color: #00ff87;
+  border: 1px solid rgba(0, 255, 135, 0.3);
+}
+
+.badge-gold {
+  background: rgba(245, 158, 11, 0.15);
+  color: #ffd700;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* ============================================================
+   TAB NAVIGATION
+   ============================================================ */
+.nav-tab-btn.active {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: var(--accent-green);
+  color: var(--accent-neon);
+}
+
+/* ============================================================
+   MOBILE HAMBURGER MENU
+   ============================================================ */
+#mobile-menu {
+  transition: max-height 0.35s ease, opacity 0.3s ease;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+#mobile-menu.open {
+  max-height: 400px;
+  opacity: 1;
+}
+
+/* ============================================================
+   HERO SECTION — MOBILE FIRST
+   ============================================================ */
+.hero-image-wrapper {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  aspect-ratio: 3/4;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .hero-image-wrapper {
+    max-width: 380px;
+    aspect-ratio: 4/5;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-image-wrapper {
+    max-width: 420px;
+  }
+}
+
+/* ============================================================
+   STATS CARDS — MOBILE
+   ============================================================ */
+.stat-card-text {
+  font-size: 1.25rem;
+}
+
+@media (min-width: 480px) {
+  .stat-card-text {
+    font-size: 1.5rem;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE TABLES — mobile scroll
+   ============================================================ */
+.table-scroll-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 1rem;
+}
+
+/* ============================================================
+   TOUCH TARGETS — min 44px for all interactive elements
+   ============================================================ */
+button, a, select, input[type="submit"] {
+  min-height: 36px;
+}
+
+/* ============================================================
+   PREVENT HORIZONTAL OVERFLOW
+   ============================================================ */
+img, video, iframe, table {
+  max-width: 100%;
+}
+
+/* ============================================================
+   FORM INPUTS — larger on mobile
+   ============================================================ */
+input, select, textarea {
+  font-size: 16px !important; /* prevents iOS zoom on focus */
+}
+
+/* ============================================================
+   SECTION SPACING — tighter on mobile
+   ============================================================ */
+@media (max-width: 640px) {
+  .mobile-space-y-12 > * + * {
+    margin-top: 3rem;
+  }
+
+  .glass-card {
+    border-radius: 0.875rem;
+  }
+}
+
+/* ============================================================
+   ADMIN TABS — scrollable on mobile
+   ============================================================ */
+.admin-tabs-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  white-space: nowrap;
+  padding-bottom: 4px;
+}
+
+.admin-tabs-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================================
+   PROGRESS TABLE — compact on mobile
+   ============================================================ */
+@media (max-width: 640px) {
+  .progress-table td,
+  .progress-table th {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}

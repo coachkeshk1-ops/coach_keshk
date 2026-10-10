@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coach Keshk - التدريب الشخصي والتغذية الرياضية | Personal Trainer</title>
+  <meta name="description" content="الموقع الرسمي للمدرب Coach Keshk للتدريب الشخصي والتغذية الرياضية وإعادة تشكيل الجسم بأحدث الأساليب العلمية.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            darkBg: '#0d1117',
+            cardBg: '#161b22',
+            accentGreen: '#10b981',
+            accentNeon: '#00ff87',
+            accentGold: '#f59e0b',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- SheetJS CDN for Excel (.xlsx) parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#0d1117] text-[#f0f6fc] antialiased selection:bg-emerald-500 selection:text-slate-950">
+
+  <!-- TOP NAVIGATION BAR -->
+  <nav class="sticky top-0 z-40 bg-[#0d1117]/95 backdrop-blur-md border-b border-slate-800/80 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="h-16 sm:h-20 flex items-center justify-between">
+
+        <!-- Brand Logo -->
+        <a href="#" onclick="logoutTrainee(); return false;" class="flex items-center gap-2.5 group shrink-0">
+          <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+            <div class="w-full h-full bg-[#0d1117] rounded-[10px] flex items-center justify-center">
+              <i class="fas fa-dumbbell text-emerald-400 text-base sm:text-xl group-hover:rotate-12 transition-transform"></i>
+            </div>
+          </div>
+          <div>
+            <span class="text-base sm:text-xl font-black tracking-tight text-white block group-hover:text-emerald-400 transition-colors" data-i18n="navBrand">Coach Keshk</span>
+            <span class="hidden sm:block text-[11px] text-amber-400 font-semibold tracking-wider uppercase" data-i18n="navSub">مدرب كمال أجسام ولياقة بدنية</span>
+          </div>
+        </a>
+
+        <!-- Desktop Nav Links -->
+        <div class="hidden md:flex items-center gap-8 text-sm font-semibold">
+          <a href="#about" class="text-slate-300 hover:text-emerald-400 transition-colors" data-i18n="navAbout">عن المدرب</a>
+          <a href="#services" class="text-slate-300 hover:text-emerald-400 transition-colors" data-i18n="navServices">الخدمات</a>
+          <a href="#join" class="text-slate-300 hover:text-emerald-400 transition-colors" data-i18n="navJoin">انضم للتدريب</a>
+        </div>
+
+        <!-- Right: Language + Login + Hamburger -->
+        <div class="flex items-center gap-2">
+          <!-- Language Switcher -->
+          <button onclick="toggleLanguage()" class="bg-slate-800/80 hover:bg-slate-700 text-slate-200 px-2.5 py-2 rounded-lg text-xs font-bold border border-slate-700 transition-all flex items-center gap-1">
+            <i class="fas fa-globe text-emerald-400"></i>
+            <span id="lang-btn-text" class="hidden xs:inline">English</span>
+          </button>
+
+          <!-- Trainee Login Button (hidden on tiny screens, shown in menu) -->
+          <button onclick="openModal('trainee-login-modal')" class="hidden sm:flex glow-btn-green text-slate-950 px-3 py-2 rounded-lg text-xs font-black items-center gap-2">
+            <i class="fas fa-user-lock"></i>
+            <span data-i18n="navLogin">دخول المتدربين</span>
+          </button>
+
+          <!-- Hamburger (mobile only) -->
+          <button id="hamburger-btn" onclick="toggleMobileMenu()" class="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-lg bg-slate-800 border border-slate-700 gap-1.5 transition-all" aria-label="Menu">
+            <span class="block w-5 h-0.5 bg-slate-300 transition-all" id="hb-line1"></span>
+            <span class="block w-5 h-0.5 bg-slate-300 transition-all" id="hb-line2"></span>
+            <span class="block w-4 h-0.5 bg-slate-300 transition-all" id="hb-line3"></span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="md:hidden border-t border-slate-800/60">
+      <div class="px-4 py-4 space-y-2">
+        <a href="#about" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:text-emerald-400 hover:bg-slate-800/60 font-semibold text-sm transition-all" data-i18n="navAbout">عن المدرب</a>
+        <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:text-emerald-400 hover:bg-slate-800/60 font-semibold text-sm transition-all" data-i18n="navServices">الخدمات</a>
+        <a href="#join" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:text-emerald-400 hover:bg-slate-800/60 font-semibold text-sm transition-all" data-i18n="navJoin">انضم للتدريب</a>
+        <div class="pt-2 border-t border-slate-800">
+          <button onclick="openModal('trainee-login-modal'); closeMobileMenu();" class="w-full glow-btn-green text-slate-950 font-black py-3 rounded-xl text-sm flex items-center justify-center gap-2">
+            <i class="fas fa-user-lock"></i>
+            <span data-i18n="navLogin">دخول المتدربين</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== MAIN PUBLIC LANDING PAGE ==================== -->
+  <main id="main-public-view" class="space-y-16 sm:space-y-24 pb-20">
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-8 sm:pt-12 lg:pt-20 overflow-hidden">
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 sm:w-[600px] h-72 sm:h-[600px] bg-emerald-500/10 blur-[100px] sm:blur-[140px] rounded-full pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:grid lg:grid-cols-12 lg:gap-12 lg:items-center">
+
+          <!-- Hero Image — appears FIRST on mobile, right side on desktop -->
+          <div class="lg:col-span-5 lg:order-2 flex justify-center mb-8 lg:mb-0">
+            <div class="hero-image-wrapper gradient-border-box shadow-2xl">
+              <img src="assets/images/hero.png" alt="Coach Keshk Personal Trainer" class="w-full h-full object-cover object-top">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0d1117] via-transparent to-transparent opacity-70"></div>
+              <!-- Floating Badge -->
+              <div class="absolute bottom-4 inset-x-4 glass-card p-3 flex items-center gap-3 border-emerald-500/30">
+                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-base shrink-0">
+                  <i class="fas fa-trophy"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-white text-xs sm:text-sm">Coach Keshk</h4>
+                  <p class="text-slate-400 text-[10px] sm:text-xs">خبير تشكيل وتناسق العضلات</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Text — appears SECOND on mobile, left side on desktop -->
+          <div class="lg:col-span-7 lg:order-1 space-y-5 text-center lg:text-right">
+
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full badge-neon text-xs font-bold tracking-wide">
+              <i class="fas fa-certificate text-emerald-400"></i>
+              <span data-i18n="heroBadge">برامج تدريبية وتغذية مخصصة 100%</span>
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight">
+              <span class="block" data-i18n="heroTitle">غير جسمك وحياتك مع Coach Keshk</span>
+              <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-400 bg-clip-text text-transparent">
+                علمياً وبدون حرمان
+              </span>
+            </h1>
+
+            <p class="text-slate-300 text-sm sm:text-base lg:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0" data-i18n="heroDesc">
+              احصل على خطة تدريبية وتغذية علمية مصممة خصيصاً لهدفك وجيناتك. متابعة يومية وتحليل دقيق للتقدم لضمان أفضل النتائج بأسرع وقت.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 pt-2">
+              <a href="#join" class="glow-btn-green text-slate-950 font-black px-6 py-3.5 rounded-xl text-sm flex items-center justify-center gap-2">
+                <span data-i18n="heroCtaJoin">ابدأ رحلتك الآن</span>
+                <i class="fas fa-arrow-left"></i>
+              </a>
+              <button onclick="openModal('trainee-login-modal')" class="bg-slate-900/80 hover:bg-slate-800 text-slate-200 font-bold px-6 py-3.5 rounded-xl text-sm border border-slate-700/80 flex items-center justify-center gap-2 transition-all">
+                <i class="fas fa-id-card text-amber-400"></i>
+                <span data-i18n="heroCtaLogin">بوابة المتدربين (Login)</span>
+              </button>
+            </div>
+
+            <!-- Hero Stats Grid -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-4 pt-6 border-t border-slate-800/80">
+              <div class="glass-card p-3 sm:p-4 text-center">
+                <div class="text-lg sm:text-2xl lg:text-3xl font-black text-emerald-400" data-i18n="statClients">+500 متدرب</div>
+                <p class="text-slate-400 text-[10px] sm:text-xs mt-1" data-i18n="statClientsSub">تم تحقيق أهدافهم</p>
+              </div>
+              <div class="glass-card p-3 sm:p-4 text-center">
+                <div class="text-lg sm:text-2xl lg:text-3xl font-black text-amber-400" data-i18n="statSuccess">99.2%</div>
+                <p class="text-slate-400 text-[10px] sm:text-xs mt-1" data-i18n="statSuccessSub">نسبة نجاح التحول</p>
+              </div>
+              <div class="glass-card p-3 sm:p-4 text-center">
+                <div class="text-lg sm:text-2xl lg:text-3xl font-black text-emerald-400" data-i18n="statExp">+8 سنوات</div>
+                <p class="text-slate-400 text-[10px] sm:text-xs mt-1" data-i18n="statExpSub">خبرة في التدريب الاحترافي</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT ME SECTION -->
+    <section id="about" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+      <div class="glass-card p-8 lg:p-12 relative overflow-hidden border-slate-800">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <div class="lg:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full badge-gold text-xs font-bold">
+              <i class="fas fa-user-shield"></i>
+              <span>المدرب الشخصي</span>
+            </div>
+
+            <h2 class="text-3xl sm:text-4xl font-black text-white" data-i18n="aboutTitle">من هو Coach Keshk؟</h2>
+            <p class="text-amber-400 font-semibold text-sm" data-i18n="aboutSubtitle">خبرة تدريبية وعلمية لبناء القوة والفيزيك المثالي</p>
+            
+            <p class="text-slate-300 leading-relaxed text-sm sm:text-base" data-i18n="aboutText1">
+              مرحباً بكم! أنا Coach Keshk، مدرب شخصي معتمد ومستشار تغذية رياضية. على مدار أكثر من 8 سنوات، قمت بمساعدة المئات من المتدربين في مصر والوطن العربي على إعادة تشكيل أجسامهم (Body Recomposition)، سواء لخسارة الدهون الصعبة أو بناء كتلة عضلية صافية.
+            </p>
+
+            <p class="text-slate-300 leading-relaxed text-sm sm:text-base" data-i18n="aboutText2">
+              نظامي التدريبي يعتمد 100% على أسس علمية مثبتة، بدون حرمان أو جشع، مع تصميم كل وجبة وتمرين ليتناسب مع نمط حياتك وظروف عملك.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+              <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+                <i class="fas fa-utensils text-emerald-400 text-xl mb-2"></i>
+                <h4 class="font-bold text-white text-sm" data-i18n="feat1Title">أنظمة تغذية مخصصة</h4>
+                <p class="text-slate-400 text-xs mt-1" data-i18n="feat1Desc">حساب دقيق للماكروز والسعرات مع وجبات بالصور.</p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+                <i class="fas fa-dumbbell text-amber-400 text-xl mb-2"></i>
+                <h4 class="font-bold text-white text-sm" data-i18n="feat2Title">جدول تمارين احترافي</h4>
+                <p class="text-slate-400 text-xs mt-1" data-i18n="feat2Desc">برامج تدريبية مقسمة بعناية مع شرح بالفيديو.</p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+                <i class="fas fa-chart-line text-emerald-400 text-xl mb-2"></i>
+                <h4 class="font-bold text-white text-sm" data-i18n="feat3Title">متابعة وتقييم أسبوعي</h4>
+                <p class="text-slate-400 text-xs mt-1" data-i18n="feat3Desc">تحليل تغيرات الوزن والمقاسات والأوزان المرفوعة.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="w-full max-w-sm rounded-xl overflow-hidden border border-slate-700 shadow-2xl">
+              <img src="assets/images/gym.png" alt="Coach Keshk Gym Facility" class="w-full h-80 object-cover">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section id="services" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
+        <h2 class="text-3xl sm:text-4xl font-black text-white" data-i18n="servicesTitle">خدمات التدريب الشخصي</h2>
+        <p class="text-slate-400 text-sm sm:text-base" data-i18n="servicesSub">اختر النظام الأنسب لك للوصول لهدفك بأسرع وقت</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Service 1 -->
+        <div class="glass-card p-8 space-y-4 flex flex-col justify-between border-slate-800">
+          <div class="space-y-4">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl font-bold">
+              <i class="fas fa-mobile-screen-button"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white" data-i18n="srv1Title">التدريب الأونلاين الشامل</h3>
+            <p class="text-slate-300 text-sm leading-relaxed" data-i18n="srv1Desc">متابعة يومية عبر الواتساب + خطة تغذية وتدريب مخصصة + مراجعة تكنيك التمارين.</p>
+          </div>
+          <a href="#join" class="block text-center glow-btn-green text-slate-950 font-bold py-3 rounded-lg text-xs">
+            اشترك في البرنامج
+          </a>
+        </div>
+
+        <!-- Service 2 -->
+        <div class="glass-card glass-card-gold p-8 space-y-4 flex flex-col justify-between border-amber-500/30 relative">
+          <div class="absolute -top-3 right-6 badge-gold px-3 py-1 rounded-full text-[11px] font-bold">الأكثر طلباً</div>
+          <div class="space-y-4">
+            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-bold">
+              <i class="fas fa-fire"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white" data-i18n="srv2Title">إعادة تشكيل الجسم (Recomp)</h3>
+            <p class="text-slate-300 text-sm leading-relaxed" data-i18n="srv2Desc">نظام مكثف لبناء العضلات وخسارة الدهون في نفس الوقت باستراتيجيات علمية.</p>
+          </div>
+          <a href="#join" class="block text-center glow-btn-gold text-slate-950 font-bold py-3 rounded-lg text-xs">
+            اشترك في البرنامج
+          </a>
+        </div>
+
+        <!-- Service 3 -->
+        <div class="glass-card p-8 space-y-4 flex flex-col justify-between border-slate-800">
+          <div class="space-y-4">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl font-bold">
+              <i class="fas fa-medal"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white" data-i18n="srv3Title">تجهيز البطولات والفيزيك</h3>
+            <p class="text-slate-300 text-sm leading-relaxed" data-i18n="srv3Desc">برنامج احترافي متقدم للمتسابقين يشمل تجفيف وتجهيز وتصوير التغيرات.</p>
+          </div>
+          <a href="#join" class="block text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-lg text-xs border border-slate-700">
+            تواصل للاستفسار
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- JOIN ME / ONBOARDING FORM SECTION -->
+    <section id="join" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="glass-card p-8 sm:p-12 relative border-emerald-500/30">
+        <div class="text-center space-y-3 mb-8">
+          <h2 class="text-3xl font-black text-white" data-i18n="joinTitle">قدم طلب انضمامك الآن</h2>
+          <p class="text-slate-400 text-sm" data-i18n="joinSub">سيقوم Coach Keshk بمراجعة بياناتك والتواصل معك لإعداد حسابك المخصص</p>
+        </div>
+
+        <form onsubmit="handleJoinSubmit(event)" class="space-y-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="nameLabel">الاسم بالكامل</label>
+              <input type="text" name="name" required class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-400" placeholder="مثال: أحمد محمود">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="phoneLabel">رقم الهاتف / الواتساب</label>
+              <input type="tel" name="phone" required class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-400" placeholder="+20 100 000 0000">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="emailLabel">البريد الإلكتروني</label>
+              <input type="email" name="email" required class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-400" placeholder="example@mail.com">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="ageLabel">العمر</label>
+              <input type="number" name="age" required min="14" max="80" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-400" placeholder="25">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="weightLabel">الوزن الحالي (كجم)</label>
+              <input type="number" step="0.1" name="weight" required class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-400" placeholder="80">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="heightLabel">الطول (سم)</label>
+              <input type="number" name="height" required class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-400" placeholder="175">
+            </div>
+
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="goalLabel">الهدف الرئيسي</label>
+              <select name="goal" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-400">
+                <option value="تنشيف وخسارة دهون (Fat Loss)" data-i18n="goalOpt1">تنشيف وخسارة دهون (Fat Loss)</option>
+                <option value="تضخيم وبناء عضلات (Muscle Gain)" data-i18n="goalOpt2">تضخيم وبناء عضلات (Muscle Gain)</option>
+                <option value="إعادة تشكيل الجسم (Body Recomp)" data-i18n="goalOpt3">إعادة تشكيل الجسم (Body Recomp)</option>
+                <option value="لياقة عامة وشد الجسم (Toning)" data-i18n="goalOpt4">لياقة عامة وشد الجسم (Toning)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-2" data-i18n="activityLabel">مستوى النشاط اليومي</label>
+              <select name="activity" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-400">
+                <option value="قليل النشاط (عمل مكتبي)" data-i18n="activityOpt1">قليل النشاط (عمل مكتبي)</option>
+                <option value="متوسط (تمرين 3 أيام أسبوعياً)" data-i18n="activityOpt2">متوسط (تمرين 3 أيام أسبوعياً)</option>
+                <option value="نشيط جداً (تمرين 5-6 أيام أسبوعياً)" data-i18n="activityOpt3">نشيط جداً (تمرين 5-6 أيام أسبوعياً)</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full glow-btn-green text-slate-950 font-black py-4 rounded-xl text-base shadow-xl flex items-center justify-center gap-2">
+            <i class="fas fa-paper-plane"></i>
+            <span data-i18n="btnSubmitJoin">إرسال طلب الانضمام</span>
+          </button>
+        </form>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== ISOLATED TRAINEE PORTAL VIEW ==================== -->
+  <section id="trainee-portal-view" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    
+    <!-- Portal Header -->
+    <div class="glass-card p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 border-emerald-500/40">
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <span class="badge-neon px-3 py-1 rounded-full text-xs font-bold" id="trainee-id-badge">ID: KESH-101</span>
+          <span class="badge-gold px-3 py-1 rounded-full text-xs font-bold" id="trainee-goal-badge">تنشيف وتطوير الفيزيك</span>
+        </div>
+        <h2 class="text-3xl font-black text-white">
+          <span data-i18n="welcomeUser">أهلاً بك، </span>
+          <span id="trainee-name-heading" class="text-emerald-400">عمر السيد</span>
+        </h2>
+        <p class="text-slate-400 text-xs sm:text-sm">هذا الحساب مخصص لك فقط ومحمي من الاطلاع الخارجي.</p>
+      </div>
+
+      <button onclick="logoutTrainee()" class="bg-red-500/20 hover:bg-red-500/40 text-red-400 font-bold px-5 py-2.5 rounded-xl border border-red-500/30 text-xs flex items-center gap-2 self-start md:self-auto">
+        <i class="fas fa-right-from-bracket"></i>
+        <span data-i18n="logoutBtn">تسجيل الخروج</span>
+      </button>
+    </div>
+
+    <!-- Macros & Caloric Summary -->
+    <div class="space-y-4">
+      <h3 class="text-xl font-bold text-white flex items-center gap-2" data-i18n="targetMacrosTitle">
+        <i class="fas fa-fire-flame-curved text-amber-400"></i>
+        <span>الأهداف الغذائية اليومية (Macros)</span>
+      </h3>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Calories -->
+        <div class="glass-card p-5 border-amber-500/30">
+          <span class="text-slate-400 text-xs font-semibold block mb-1" data-i18n="totalCalories">السعرات اليومية</span>
+          <div class="text-3xl font-black text-amber-400" id="trainee-calories">2350</div>
+          <span class="text-slate-500 text-[11px]">Kcal / Day</span>
+        </div>
+
+        <!-- Protein -->
+        <div class="glass-card p-5 border-emerald-500/30">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-slate-400 text-xs font-semibold" data-i18n="proteinGrams">بروتين (Protein)</span>
+            <span class="text-emerald-400 font-bold text-xs" id="trainee-protein">185g</span>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-2 mt-3 overflow-hidden">
+            <div id="bar-protein" class="bg-emerald-400 h-full rounded-full" style="width: 40%"></div>
+          </div>
+        </div>
+
+        <!-- Carbs -->
+        <div class="glass-card p-5 border-blue-500/30">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-slate-400 text-xs font-semibold" data-i18n="carbsGrams">كاربوهيدرات (Carbs)</span>
+            <span class="text-blue-400 font-bold text-xs" id="trainee-carbs">220g</span>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-2 mt-3 overflow-hidden">
+            <div id="bar-carbs" class="bg-blue-400 h-full rounded-full" style="width: 45%"></div>
+          </div>
+        </div>
+
+        <!-- Fats -->
+        <div class="glass-card p-5 border-yellow-500/30">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-slate-400 text-xs font-semibold" data-i18n="fatsGrams">دهون صحية (Fats)</span>
+            <span class="text-yellow-400 font-bold text-xs" id="trainee-fats">65g</span>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-2 mt-3 overflow-hidden">
+            <div id="bar-fats" class="bg-yellow-400 h-full rounded-full" style="width: 15%"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Coach Notes Alert -->
+    <div class="glass-card p-6 border-amber-500/40 bg-amber-500/5 flex items-start gap-4">
+      <div class="w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-lg shrink-0">
+        <i class="fas fa-comment-dots"></i>
+      </div>
+      <div>
+        <h4 class="font-bold text-amber-400 text-sm mb-1" data-i18n="coachNotesTitle">توجيهات وملاحظات Coach Keshk</h4>
+        <p class="text-slate-200 text-sm leading-relaxed" id="trainee-coach-notes">أداء ممتاز يا عمر! استمر على نفس الماكروز هذا الأسبوع وواظب على 4 لتر ماء يومياً.</p>
+      </div>
+    </div>
+
+    <!-- Meals Grid Section -->
+    <div class="space-y-4">
+      <h3 class="text-xl font-bold text-white flex items-center gap-2" data-i18n="mealsTitle">
+        <i class="fas fa-utensils text-emerald-400"></i>
+        <span>جدول الوجبات اليومي المخصص</span>
+      </h3>
+      
+      <div id="trainee-meals-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Dynamic Meal Cards -->
+      </div>
+    </div>
+
+    <!-- Workout Program Section -->
+    <div class="space-y-4">
+      <h3 class="text-xl font-bold text-white flex items-center gap-2" data-i18n="workoutTitle">
+        <i class="fas fa-dumbbell text-emerald-400"></i>
+        <span>برنامج التمارين الأسبوعي</span>
+      </h3>
+      
+      <div id="trainee-workout-list" class="space-y-3">
+        <!-- Dynamic Workouts -->
+      </div>
+    </div>
+
+    <!-- Progress Tracking Section -->
+    <div class="space-y-4">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-bold text-white flex items-center gap-2" data-i18n="progressTitle">
+          <i class="fas fa-chart-line text-emerald-400"></i>
+          <span>سجل التقدم والوزن الأسبوعي</span>
+        </h3>
+        <button onclick="openModal('add-progress-modal')" class="glow-btn-green text-slate-950 font-bold px-4 py-2 rounded-lg text-xs" data-i18n="addProgressBtn">
+          تسجيل وزن جديد
+        </button>
+      </div>
+
+      <div class="table-scroll-wrap glass-card">
+        <table class="progress-table w-full text-right border-collapse min-w-[360px]">
+          <thead>
+            <tr class="bg-slate-900/80 border-b border-slate-800 text-xs text-slate-400">
+              <th class="py-3 px-4">التاريخ</th>
+              <th class="py-3 px-4">الوزن</th>
+              <th class="py-3 px-4">الملاحظات</th>
+            </tr>
+          </thead>
+          <tbody id="trainee-progress-table">
+            <!-- Dynamic Progress Rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ==================== SECRET ADMIN DASHBOARD VIEW ==================== -->
+  <section id="admin-dashboard-view" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    
+    <!-- Admin Top Control Header -->
+    <div class="glass-card p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 border-amber-500/40">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-2xl">
+          <i class="fas fa-user-gear"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-black text-white" data-i18n="adminTitle">لوحة التحكم السرية - Coach Keshk</h2>
+          <p class="text-slate-400 text-xs">إدارة المتدربين، التعديل الفوري للوجبات والماكروز، ومتابعة الطلبات الجديدة</p>
+        </div>
+      </div>
+
+      <button onclick="logoutAdmin()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-lg text-xs font-bold border border-slate-700">
+        خروج من اللوحة (Lock)
+      </button>
+    </div>
+
+    <!-- Admin Tab Navigation -->
+    <div class="admin-tabs-scroll flex gap-2 border-b border-slate-800 pb-2">
+      <button onclick="state.activeAdminTab='pending'; renderAdminDashboard();" class="nav-tab-btn shrink-0 px-4 py-2.5 rounded-xl font-bold text-xs border border-slate-800 transition-all" data-i18n="tabPending">
+        الطلبات المعلقة (Pending)
+      </button>
+      <button onclick="state.activeAdminTab='customizer'; renderAdminDashboard();" class="nav-tab-btn shrink-0 px-4 py-2.5 rounded-xl font-bold text-xs border border-slate-800 transition-all" data-i18n="tabCustomizer">
+        تعديل خطط المتدربين
+      </button>
+      <button onclick="state.activeAdminTab='excel'; renderAdminDashboard();" class="nav-tab-btn shrink-0 px-4 py-2.5 rounded-xl font-bold text-xs border border-slate-800 transition-all" data-i18n="tabSheets">
+        Excel / Sheets
+      </button>
+    </div>
+
+    <!-- TAB 1: PENDING CLIENTS QUEUE -->
+    <div id="admin-tab-pending" class="space-y-4">
+      <div class="table-scroll-wrap glass-card">
+        <table class="w-full text-right border-collapse min-w-[600px]">
+          <thead>
+            <tr class="bg-slate-900/90 border-b border-slate-800 text-xs text-slate-400">
+              <th class="py-3 px-4">اسم المتقدم</th>
+              <th class="py-3 px-4">بيانات التواصل</th>
+              <th class="py-3 px-4">العمر / الوزن / الطول</th>
+              <th class="py-3 px-4">الهدف</th>
+              <th class="py-3 px-4">مستوى النشاط</th>
+              <th class="py-3 px-4 text-left">الإجراء</th>
+            </tr>
+          </thead>
+          <tbody id="admin-pending-table">
+            <!-- Dynamic Pending Applications -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 2: CLIENT PLAN CUSTOMIZER -->
+    <div id="admin-tab-customizer" class="glass-card p-6 sm:p-8 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-400 mb-1" data-i18n="activeTrainees">اختر المتدرب لتعديل خطته</label>
+          <select id="admin-client-select" onchange="loadClientIntoEditor(this.value)" class="bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white font-bold min-w-[260px]">
+            <!-- Dynamic Options -->
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <input type="text" id="client-access-url" readonly class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-400 w-64">
+          <button onclick="copyAccessUrl()" class="bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-400 font-bold px-3 py-2 rounded-lg text-xs border border-emerald-500/30">
+            <i class="fas fa-copy"></i> نسخ الرابط
+          </button>
+          <button onclick="openRemoveTraineeConfirm()" class="bg-red-500/20 hover:bg-red-500/40 text-red-400 font-bold px-3 py-2 rounded-lg text-xs border border-red-500/40 flex items-center gap-1.5 transition-all">
+            <i class="fas fa-user-minus"></i> حذف المتدرب
+          </button>
+        </div>
+      </div>
+
+      <!-- Plan Form -->
+      <form onsubmit="handleSaveClientPlan(event)" class="space-y-6">
+        
+        <!-- Target Calories & Macros -->
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-amber-400 mb-1">السعرات الحرارية اليومية</label>
+            <input type="number" id="edit-calories" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white font-bold">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-emerald-400 mb-1">البروتين (جرام)</label>
+            <input type="number" id="edit-protein" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white font-bold">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-blue-400 mb-1">الكاربوهيدرات (جرام)</label>
+            <input type="number" id="edit-carbs" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white font-bold">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-yellow-400 mb-1">الدهون الصحية (جرام)</label>
+            <input type="number" id="edit-fats" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white font-bold">
+          </div>
+        </div>
+
+        <!-- Coach Direct Notes -->
+        <div>
+          <label class="block text-xs font-bold text-amber-400 mb-1">ملاحظات وتوجيهات الكابتن لهذا المتدرب</label>
+          <textarea id="edit-coach-notes" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="اكتب التوجيهات اليومية أو تغييرات الأسبوع..."></textarea>
+        </div>
+
+        <!-- Meal Builder -->
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <h4 class="font-bold text-white text-base">الوجبات المخصصة وصورها Direct Image URLs</h4>
+            <button type="button" onclick="addMealToEditor()" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold px-3 py-1.5 rounded-lg text-xs border border-slate-700">
+              <i class="fas fa-plus"></i> إضافة وجبة
+            </button>
+          </div>
+
+          <div id="admin-meals-editor" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Dynamic Meal Editor Cards -->
+          </div>
+        </div>
+
+        <button type="submit" class="glow-btn-green text-slate-950 font-black px-8 py-3.5 rounded-xl text-sm shadow-xl flex items-center justify-center gap-2">
+          <i class="fas fa-save"></i>
+          <span data-i18n="savePlanBtn">حفظ التعديلات للخطة</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- TAB 3: EXCEL / GOOGLE SHEETS CONNECTOR PANEL -->
+    <div id="admin-tab-excel" class="hidden glass-card p-6 sm:p-8 space-y-8 border-emerald-500/40">
+      <div class="space-y-2 border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xl">
+            <i class="fas fa-file-excel"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-white">ربط قاعدة البيانات بملف Excel / Google Sheets</h3>
+            <p class="text-slate-400 text-xs">يتم قراءة التعديلات من ملف Excel تلقائياً دون الحاجة إلى تعديل الكود</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Option A: Live Google Sheets Web App Endpoint -->
+      <div class="space-y-4 bg-slate-900/60 p-6 rounded-2xl border border-slate-800">
+        <h4 class="font-bold text-emerald-400 text-sm flex items-center gap-2">
+          <i class="fas fa-link"></i>
+          <span>1. ربط مباشر عبر رابط Google Sheets Web App API (تحديث تلقائي)</span>
+        </h4>
+        <p class="text-slate-300 text-xs leading-relaxed">
+          أدخل رابط الـ Web App المأخوذ من Google Apps Script. سيقوم الموقع بقراءة بيانات المتدرب حسب الـ Trainee ID مباشرة وبسرية تامة.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input type="url" id="excel-api-url-input" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white" placeholder="https://script.google.com/macros/s/AKfycbx.../exec">
+          <button onclick="saveExcelApiUrl()" class="glow-btn-green text-slate-950 font-bold px-6 py-2.5 rounded-xl text-xs shrink-0">
+            حفظ الرابط
+          </button>
+          <button onclick="syncFromExcelApi()" class="bg-amber-500/20 hover:bg-amber-500/40 text-amber-400 font-bold px-6 py-2.5 rounded-xl text-xs border border-amber-500/30 shrink-0">
+            <i class="fas fa-rotate"></i> جلب وتزامن الآن
+          </button>
+        </div>
+      </div>
+
+      <!-- Option B: Direct Local Excel (.xlsx) File Upload -->
+      <div class="space-y-4 bg-slate-900/60 p-6 rounded-2xl border border-slate-800">
+        <h4 class="font-bold text-amber-400 text-sm flex items-center gap-2">
+          <i class="fas fa-upload"></i>
+          <span>2. رفع وتحديث بيانات المتدربين من ملف Excel (.xlsx) مباشر</span>
+        </h4>
+        <p class="text-slate-300 text-xs leading-relaxed">
+          قم برفع ملف Excel الذي يحتوي على صفوف المتدربين لتحديث النظام فوراً.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+          <input type="file" id="excel-file-input" accept=".xlsx, .xls, .csv" onchange="handleExcelFileUpload(event)" class="hidden">
+          <button onclick="document.getElementById('excel-file-input').click()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-3 rounded-xl text-xs border border-slate-700 flex items-center gap-2">
+            <i class="fas fa-folder-open text-emerald-400"></i> اختيار ملف Excel (.xlsx)
+          </button>
+          <button onclick="downloadExcelTemplate()" class="bg-slate-900 hover:bg-slate-800 text-emerald-400 font-bold px-6 py-3 rounded-xl text-xs border border-emerald-500/30 flex items-center gap-2">
+            <i class="fas fa-download"></i> تحميل قالب Excel جاهز (Template)
+          </button>
+        </div>
+      </div>
+
+      <!-- Option C: Ready Google Apps Script Code Copy -->
+      <div class="space-y-3 bg-slate-900/60 p-6 rounded-2xl border border-slate-800">
+        <div class="flex justify-between items-center">
+          <h4 class="font-bold text-white text-sm flex items-center gap-2">
+            <i class="fas fa-code text-emerald-400"></i>
+            <span>كود Google Apps Script الجاهز لربط شيت اكسل مجاناً</span>
+          </h4>
+          <button onclick="copyAppsScriptCode()" class="text-xs text-emerald-400 font-bold hover:underline">
+            <i class="fas fa-copy"></i> نسخ كود السكريبت
+          </button>
+        </div>
+        <textarea id="apps-script-code-box" readonly class="w-full bg-slate-950 border border-slate-800 text-emerald-400 text-xs p-4 rounded-xl font-mono h-32" dir="ltr">
+function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  var result = [];
+  
+  for (var i = 1; i < data.length; i++) {
+    var obj = {};
+    for (var j = 0; j < headers.length; j++) {
+      obj[headers[j]] = data[i][j];
+    }
+    result.push(obj);
+  }
+  
+  var requestedId = e && e.parameter ? e.parameter.id : null;
+  if (requestedId) {
+    result = result.filter(function(r) { 
+      return String(r['Trainee ID']).toLowerCase() === String(requestedId).toLowerCase(); 
+    });
+  }
+  
+  return ContentService.createTextOutput(JSON.stringify(result))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+        </textarea>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t border-slate-800/80 bg-[#0d1117] py-10 mt-20 text-center text-slate-500 text-xs">
+    <div class="max-w-7xl mx-auto px-4 space-y-3">
+      <div class="flex items-center justify-center gap-2 text-slate-400 font-bold">
+        <span>Coach Keshk Official Website</span>
+        <button id="secret-admin-trigger" title="Coach Login Shortcut (Alt+X)" class="text-slate-700 hover:text-amber-400 transition-colors">
+          <i class="fas fa-key"></i>
+        </button>
+      </div>
+      <p>© 2026 Coach Keshk. All rights reserved. Built with modern full-stack performance.</p>
+    </div>
+  </footer>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- TRAINEE LOGIN MODAL -->
+  <div id="trainee-login-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop">
+    <div class="glass-card max-w-md w-full p-8 relative border-emerald-500/40">
+      <button onclick="closeModal('trainee-login-modal')" class="absolute top-4 left-4 text-slate-400 hover:text-white text-lg">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="text-center space-y-2 mb-6">
+        <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl font-bold mx-auto">
+          <i class="fas fa-id-card"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white" data-i18n="loginModalTitle">تسجيل دخول المتدرب</h3>
+        <p class="text-slate-400 text-xs" data-i18n="loginModalSub">أدخل كود المتدرب الخاص بك (Unique ID) للوصول إلى خطتك المخصصة</p>
+      </div>
+
+      <form onsubmit="handleTraineeLogin(event)" class="space-y-4">
+        <div>
+          <input type="text" id="trainee-id-input" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white font-bold text-center tracking-widest focus:outline-none focus:border-emerald-400" placeholder="KESH-101" data-i18n="traineeIdPlaceholder">
+        </div>
+
+        <p id="login-error-msg" class="hidden text-red-400 text-xs text-center" data-i18n="loginError">
+          كود المتدرب غير صحيح أو غير مفعل. تواصل مع المدرب لتفعيله.
+        </p>
+
+        <button type="submit" class="w-full glow-btn-green text-slate-950 font-black py-3.5 rounded-xl text-sm shadow-xl" data-i18n="btnLoginSubmit">
+          دخول الحساب
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADMIN AUTH MODAL (ALT + X TRIGGERED) -->
+  <div id="admin-auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop">
+    <div class="glass-card max-w-md w-full p-8 relative border-amber-500/40">
+      <button onclick="closeModal('admin-auth-modal')" class="absolute top-4 left-4 text-slate-400 hover:text-white text-lg">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="text-center space-y-2 mb-6">
+        <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl font-bold mx-auto">
+          <i class="fas fa-user-lock"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white" data-i18n="adminPromptTitle">منطقة المدرب السرية (Coach Only)</h3>
+        <p class="text-slate-400 text-xs">تم تفعيل الاختصار Alt + X. أدخل كلمة المرور للدخول للوحة التحكم.</p>
+      </div>
+
+      <form onsubmit="handleAdminAuth(event)" class="space-y-4">
+        <div>
+          <input type="password" id="admin-pass-input" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white font-bold text-center tracking-widest focus:outline-none focus:border-amber-400" placeholder="••••••••" data-i18n="adminPassPlaceholder">
+        </div>
+
+        <p id="admin-pass-error" class="hidden text-red-400 text-xs text-center" data-i18n="adminPassError">
+          كلمة المرور غير صحيحة!
+        </p>
+
+        <button type="submit" class="w-full glow-btn-gold text-slate-950 font-black py-3.5 rounded-xl text-sm shadow-xl" data-i18n="btnAdminLogin">
+          تأكيد الدخول
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD TRAINEE PROGRESS MODAL -->
+  <div id="add-progress-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop">
+    <div class="glass-card max-w-md w-full p-8 relative border-emerald-500/40">
+      <button onclick="closeModal('add-progress-modal')" class="absolute top-4 left-4 text-slate-400 hover:text-white text-lg">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <h3 class="text-xl font-bold text-white mb-4">تسجيل قراءة وزن جديدة</h3>
+
+      <form onsubmit="handleAddProgress(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">الوزن الحالي (كجم)</label>
+          <input type="number" step="0.1" id="new-weight-input" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white font-bold" placeholder="مثال: 84.5">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">ملاحظات التطور (اختياري)</label>
+          <input type="text" id="new-note-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="مثال: تحسن في الأوزان وطاقة جيدة">
+        </div>
+
+        <button type="submit" class="w-full glow-btn-green text-slate-950 font-black py-3 rounded-xl text-sm">
+          حفظ القراءة
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- REMOVE TRAINEE CONFIRMATION MODAL -->
+  <div id="remove-trainee-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop">
+    <div class="glass-card max-w-md w-full p-8 relative border-red-500/40">
+      <button onclick="closeModal('remove-trainee-modal')" class="absolute top-4 left-4 text-slate-400 hover:text-white text-lg">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="text-center space-y-3 mb-6">
+        <div class="w-14 h-14 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center text-2xl font-bold mx-auto">
+          <i class="fas fa-user-minus"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white">تأكيد حذف المتدرب</h3>
+        <p id="remove-trainee-confirm-text" class="text-slate-400 text-sm leading-relaxed">
+          هل أنت متأكد من حذف هذا المتدرب من المنصة نهائياً؟ لا يمكن التراجع عن هذا الإجراء.
+        </p>
+      </div>
+
+      <div class="flex gap-3">
+        <button onclick="confirmRemoveTrainee()" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-black py-3 rounded-xl text-sm shadow-xl flex items-center justify-center gap-2 transition-all">
+          <i class="fas fa-trash-alt"></i>
+          نعم، احذف المتدرب
+        </button>
+        <button onclick="closeModal('remove-trainee-modal')" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 rounded-xl text-sm border border-slate-700 transition-all">
+          إلغاء
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main JavaScript File -->
+  <script src="app.js"></script>
+</body>
+</html>
